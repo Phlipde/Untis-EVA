@@ -4,7 +4,7 @@ const s3 = new AWS.S3()
 
 const app = express()
 async function getAWS(){
-    console.log(getting AWS);
+    console.log("getting AWS");
     await s3.putObject({
         Body: JSON.stringify({test:"main"}),
         Bucket: process.env.CYCLIC_BUCKET_NAME,
