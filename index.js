@@ -1,30 +1,29 @@
 const express = require('express')
-const AWS = require("aws-sdk");
-const s3 = new AWS.S3()
+const CyclicDb = require("@cyclic.sh/dynamodb")
+const db = CyclicDb("splendid-slug-hoodieCyclicDB")
+
 
 const app = express()
-async function getAWS(){
-    console.log("getting AWS");
-    await s3.putObject({
-        Body: JSON.stringify({test:"main"}),
-        Bucket: process.env.CYCLIC_BUCKET_NAME,
-        Key: "test/main.json",
-    }).promise()
+async function getDB(){
+    
+    const main = db.collection("main")
 
-
-    // get it back
-    let my_file = await s3.getObject({
-        Bucket: process.env.CYCLIC_BUCKET_NAME,
-        Key: "test/main.json",
-    }).promise()
-
-    console.log(JSON.parse(my_file))
+    // create an item in collection with key "leo"
+    let leo = await main.set("leo", {
+    type: "cat",
+    color: "orange"
+    })
+    
+    // get an item at key "leo" from collection main
+    let item = await main.get("leo")
+    console.log(item)
+    
 
 }
 
 app.all('/', (req, res) => {
     console.log("Just got a request!")
-    getAWS()
+    getDB()
     res.send('Yo!')
 })
 app.listen(process.env.PORT || 3000, () => {
