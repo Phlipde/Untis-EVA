@@ -4,16 +4,17 @@ const s3 = new AWS.S3()
 
 const app = express()
 async function getAWS(){
+    console.log(getting AWS);
     await s3.putObject({
         Body: JSON.stringify({test:"main"}),
-        Bucket: "cyclic-adorable-ox-overcoat-us-east-1",
+        Bucket: process.env.CYCLIC_BUCKET_NAME,
         Key: "test/main.json",
     }).promise()
 
 
     // get it back
     let my_file = await s3.getObject({
-        Bucket: "cyclic-adorable-ox-overcoat-us-east-1",
+        Bucket: process.env.CYCLIC_BUCKET_NAME,
         Key: "test/main.json",
     }).promise()
 
